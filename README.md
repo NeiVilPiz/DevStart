@@ -62,3 +62,11 @@ Toda la documentación detallada esta en la carpeta  `/docs` :
 cd client
 npm install
 npm run dev
+```
+
+---
+
+## Project Management
+
+Trello Board:
+[DevLaunch Project Managment](https://trello.com/b/ojQfqUpa/devlaunch-project-management)
