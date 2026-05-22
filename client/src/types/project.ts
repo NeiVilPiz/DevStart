@@ -6,4 +6,6 @@ export interface Project {
   features: string[]
   targetUsers: string[]
   roadmap: string[]
+
+  score?: number
 }

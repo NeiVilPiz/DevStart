@@ -1,95 +1,75 @@
-interface Project {
-    title: string
-    category: string
-    description: string
-    problem: string
-    features: string[]
-    targetUsers: string[]
-    roadmap: string[]
-  }
-  
-  interface ProjectCardProps {
-    project: Project
-  }
-  
-  export default function ProjectCard({
-    project,
-  }: ProjectCardProps) {
-    return (
-      <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-6">
-  
-        <div>
-          <h2 className="text-3xl font-bold">
-            {project.title}
-          </h2>
-  
-          <p className="text-zinc-400">
-            {project.category}
-          </p>
-        </div>
-  
-        <div>
-          <h3 className="font-semibold mb-1">
-            Description
-          </h3>
-  
-          <p className="text-zinc-300">
-            {project.description}
-          </p>
-        </div>
-  
-        <div>
-          <h3 className="font-semibold mb-1">
-            Problem
-          </h3>
-  
-          <p className="text-zinc-300">
-            {project.problem}
-          </p>
-        </div>
-  
-        <div>
-          <h3 className="font-semibold mb-2">
-            Features
-          </h3>
-  
-          <ul className="space-y-1 text-zinc-300">
-            {project.features.map((feature) => (
-              <li key={feature}>
-                • {feature}
-              </li>
-            ))}
-          </ul>
-        </div>
-  
-        <div>
-          <h3 className="font-semibold mb-2">
-            Target Users
-          </h3>
-  
-          <ul className="space-y-1 text-zinc-300">
-            {project.targetUsers.map((user) => (
-              <li key={user}>
-                • {user}
-              </li>
-            ))}
-          </ul>
-        </div>
-  
-        <div>
-          <h3 className="font-semibold mb-2">
-            Roadmap
-          </h3>
-  
-          <ul className="space-y-1 text-zinc-300">
-            {project.roadmap.map((step) => (
-              <li key={step}>
-                • {step}
-              </li>
-            ))}
-          </ul>
-        </div>
-  
+import type { Project } from "../types/project"
+
+interface ProjectCardProps {
+  project: Project
+}
+
+export default function ProjectCard({
+  project,
+}: ProjectCardProps) {
+
+  return (
+    <div className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-6">
+
+      <div>
+        <h2 className="text-3xl font-bold">
+          {project.title}
+        </h2>
+
+        <p className="text-zinc-400">
+          {project.category}
+        </p>
       </div>
-    )
-  }
+
+      {project.score !== undefined && (
+        <div className="flex items-center gap-2">
+          <span className="text-green-400 font-bold text-xl">
+            {project.score}/100
+          </span>
+
+          <span className="text-zinc-500">
+            Startup Score
+          </span>
+        </div>
+      )}
+
+      <div>
+        <h3 className="font-semibold">Description</h3>
+        <p className="text-zinc-300">{project.description}</p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold">Problem</h3>
+        <p className="text-zinc-300">{project.problem}</p>
+      </div>
+
+      <div>
+        <h3 className="font-semibold">Features</h3>
+        <ul className="text-zinc-300 space-y-1">
+          {project.features.map((f) => (
+            <li key={f}>• {f}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 className="font-semibold">Target Users</h3>
+        <ul className="text-zinc-300 space-y-1">
+          {project.targetUsers.map((u) => (
+            <li key={u}>• {u}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div>
+        <h3 className="font-semibold">Roadmap</h3>
+        <ul className="text-zinc-300 space-y-1">
+          {project.roadmap.map((r) => (
+            <li key={r}>• {r}</li>
+          ))}
+        </ul>
+      </div>
+
+    </div>
+  )
+}

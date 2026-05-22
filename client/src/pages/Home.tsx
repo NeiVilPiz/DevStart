@@ -1,176 +1,97 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
 import IdeaInput from "../components/IdeaInput"
 import ProjectCard from "../components/ProjectCard"
 
+import { useProjects } from "../context/ProjectContext"
+
+import { scoreProject } from "../utils/scoreProject"
+
 import type { Project } from "../types/project"
 
 export default function Home() {
+
   const [idea, setIdea] = useState("")
-  const [project, setProject] = useState<Project | null>(null)
 
-  // Cargar último proyecto guardado al abrir la app
-  useEffect(() => {
-    const savedProjects = localStorage.getItem("projects")
+  const { projects, addProject } =
+    useProjects()
 
-    if (!savedProjects) return
+  const project =
+    projects[projects.length - 1] || null
 
-    const parsedProjects: Project[] =
-      JSON.parse(savedProjects)
+  const detectCategory = (idea: string): string => {
 
-    if (parsedProjects.length > 0) {
-      setProject(
-        parsedProjects[
-          parsedProjects.length - 1
-        ]
-      )
-    }
-  }, [])
-
-  const detectCategory = (
-    idea: string
-  ): string => {
     const lower = idea.toLowerCase()
 
-    if (
-      lower.includes("developer") ||
-      lower.includes("dev") ||
-      lower.includes("api")
-    ) {
+    if (lower.includes("developer") || lower.includes("api")) {
       return "Developer Tools Platform"
     }
 
-    if (
-      lower.includes("fitness") ||
-      lower.includes("gym")
-    ) {
+    if (lower.includes("fitness") || lower.includes("gym")) {
       return "Fitness Platform"
     }
 
-    if (
-      lower.includes("shop") ||
-      lower.includes("store")
-    ) {
+    if (lower.includes("shop") || lower.includes("store")) {
       return "E-commerce Platform"
     }
 
-    if (
-      lower.includes("pc") ||
-      lower.includes("computer")
-    ) {
-      return "Hardware Management Platform"
-    }
-
-    if (
-      lower.includes("game")
-    ) {
-      return "Gaming Platform"
+    if (lower.includes("ai")) {
+      return "AI Platform"
     }
 
     return "Startup SaaS Platform"
   }
 
   const generateProject = () => {
+
     if (!idea.trim()) return
 
-    const category =
-      detectCategory(idea)
+    const category = detectCategory(idea)
 
-    const newProject: Project = {
+    const baseProject: Project = {
       title: category,
-
       category,
-
-      description:
-        `A ${category.toLowerCase()} ` +
-        `designed around "${idea}".`,
-
-      problem:
-        `Users struggle managing ` +
-        `${idea} efficiently.`,
-
+      description: `A ${category.toLowerCase()} built around "${idea}".`,
+      problem: `Users struggle with ${idea}.`,
       features: [
         "Authentication system",
-        "Analytics dashboard",
+        "Dashboard analytics",
         "Automation tools",
       ],
-
       targetUsers: [
         "Developers",
         "Freelancers",
-        "Teams",
+        "Startups",
       ],
-
       roadmap: [
         "Build MVP",
-        "Create backend",
-        "Deploy platform",
+        "Develop backend",
+        "Deploy product",
       ],
     }
 
-    // Obtener historial previo
-    const savedProjects =
-      localStorage.getItem("projects")
+    const newProject: Project = {
+      ...baseProject,
+      score: scoreProject(idea, baseProject),
+    }
 
-    const projects: Project[] =
-      savedProjects
-        ? JSON.parse(savedProjects)
-        : []
-
-    // Añadir proyecto nuevo
-    const updatedProjects = [
-      ...projects,
-      newProject,
-    ]
-
-    // Guardar historial
-    localStorage.setItem(
-      "projects",
-      JSON.stringify(
-        updatedProjects
-      )
-    )
-
-    setProject(newProject)
+    addProject(newProject)
 
     setIdea("")
   }
 
   return (
-    <main
-      className="
-      min-h-screen
-      bg-black
-      text-white
-      flex
-      items-center
-      justify-center
-      p-8
-    "
-    >
-      <div
-        className="
-        w-full
-        max-w-3xl
-      "
-      >
-        <h1
-          className="
-          text-5xl
-          font-bold
-          mb-4
-        "
-        >
+
+    <main className="min-h-screen bg-black text-white flex items-center justify-center p-8">
+
+      <div className="w-full max-w-3xl">
+
+        <h1 className="text-5xl font-bold mb-4">
           DevLaunch
         </h1>
 
-        <p
-          className="
-          text-zinc-400
-          mb-8
-        "
-        >
-          Turn ideas into startup concepts.
+        <p className="text-zinc-400 mb-8">
+          Turn ideas into startup concepts
         </p>
 
         <IdeaInput
@@ -180,11 +101,12 @@ export default function Home() {
         />
 
         {project && (
-          <ProjectCard
-            project={project}
-          />
+          <ProjectCard project={project} />
         )}
+
       </div>
+
     </main>
+
   )
 }
