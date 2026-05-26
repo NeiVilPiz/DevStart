@@ -14,54 +14,34 @@ export default function Home() {
   const [idea, setIdea] = useState("")
   const [loading, setLoading] = useState(false)
 
-  const {
-    projects,
-    addProject,
-  } = useProjects()
+  const { projects, addProject } = useProjects()
 
-  const project =
+  const latestProject =
     projects.length > 0
       ? projects[projects.length - 1]
       : null
 
-  const detectCategory = (
-    idea: string
-  ): string => {
+  const detectCategory = (idea: string): string => {
 
     const lower = idea.toLowerCase()
 
-    if (
-      lower.includes("developer") ||
-      lower.includes("dev") ||
-      lower.includes("api")
-    ) {
+    if (lower.includes("developer") || lower.includes("dev") || lower.includes("api")) {
       return "Developer Tools Platform"
     }
 
-    if (
-      lower.includes("fitness") ||
-      lower.includes("gym")
-    ) {
+    if (lower.includes("fitness") || lower.includes("gym")) {
       return "Fitness Platform"
     }
 
-    if (
-      lower.includes("shop") ||
-      lower.includes("store")
-    ) {
+    if (lower.includes("shop") || lower.includes("store")) {
       return "E-commerce Platform"
     }
 
-    if (
-      lower.includes("pc") ||
-      lower.includes("computer")
-    ) {
+    if (lower.includes("pc") || lower.includes("computer")) {
       return "Hardware Management Platform"
     }
 
-    if (
-      lower.includes("game")
-    ) {
+    if (lower.includes("game")) {
       return "Gaming Platform"
     }
 
@@ -76,20 +56,15 @@ export default function Home() {
 
     setTimeout(() => {
 
-      const category =
-        detectCategory(idea)
+      const category = detectCategory(idea)
 
       const newProject: Project = {
-
         title: category,
-
         category,
 
-        description:
-          `A ${category.toLowerCase()} designed around "${idea}".`,
+        description: `A ${category.toLowerCase()} designed around "${idea}".`,
 
-        problem:
-          `Users struggle managing ${idea} efficiently.`,
+        problem: `Users struggle managing ${idea} efficiently.`,
 
         features: [
           "Authentication system",
@@ -109,18 +84,15 @@ export default function Home() {
           "Deploy platform",
         ],
 
-        score: scoreProject(
-          idea,
-          {
-            title: category,
-            category,
-            description: "",
-            problem: "",
-            features: [],
-            targetUsers: [],
-            roadmap: [],
-          }
-        ),
+        score: scoreProject(idea, {
+          title: category,
+          category,
+          description: "",
+          problem: "",
+          features: [],
+          targetUsers: [],
+          roadmap: [],
+        }),
       }
 
       addProject(newProject)
@@ -133,67 +105,40 @@ export default function Home() {
   }
 
   return (
+    <main className="min-h-screen bg-black text-white flex justify-center px-4 py-10">
 
-    <main
-      className="
-      min-h-screen
-      bg-black
-      text-white
-      flex
-      justify-center
-      items-center
-      px-4
-      py-10
-      sm:px-6
-      lg:px-8
-    "
-    >
+      <div className="w-full max-w-4xl space-y-6">
 
-      <div
-        className="
-        w-full
-        max-w-4xl
-      "
-      >
+        {/* HEADER */}
+        <div>
+          <h1 className="text-4xl sm:text-5xl font-bold">
+            DevLaunch
+          </h1>
 
-        <h1
-          className="
-          text-4xl
-          sm:text-5xl
-          font-bold
-          mb-4
-        "
-        >
-          DevLaunch
-        </h1>
+          <p className="text-zinc-400 mt-2">
+            Turn ideas into startup concepts.
+          </p>
+        </div>
 
-        <p
-          className="
-          text-zinc-400
-          mb-8
-        "
-        >
-          Turn startup ideas into structured plans.
-        </p>
-
+        {/* INPUT */}
         <IdeaInput
           idea={idea}
           onIdeaChange={setIdea}
           onGenerate={generateProject}
         />
 
+        {/* LOADING */}
         {loading && (
           <LoadingCard />
         )}
 
-        {!loading && project && (
-          <ProjectCard project={project} />
+        {/* RESULT */}
+        {!loading && latestProject && (
+          <ProjectCard project={latestProject} />
         )}
 
       </div>
 
     </main>
-
   )
-
 }

@@ -9,45 +9,47 @@ export function useProjectHistory() {
 
   useEffect(() => {
 
-    const savedProjects =
+    const saved =
       localStorage.getItem("projects")
 
-    if (savedProjects) {
+    if (!saved) return
 
-      setProjects(
-        JSON.parse(savedProjects)
-      )
+    try {
+
+      setProjects(JSON.parse(saved))
+
+    } catch (error) {
+
+      console.error("Invalid localStorage data")
+
+      localStorage.removeItem("projects")
+
+      setProjects([])
 
     }
 
   }, [])
 
-  const addProject = (
-    project: Project
-  ) => {
+  const addProject = (project: Project) => {
 
-    const updatedProjects = [
-      ...projects,
-      project,
-    ]
+    setProjects(prev => {
 
-    setProjects(updatedProjects)
+      const updated = [...prev, project]
 
-    localStorage.setItem(
-      "projects",
-      JSON.stringify(
-        updatedProjects
+      localStorage.setItem(
+        "projects",
+        JSON.stringify(updated)
       )
-    )
+
+      return updated
+
+    })
 
   }
 
   return {
-
     projects,
-
     addProject,
-
   }
 
 }
