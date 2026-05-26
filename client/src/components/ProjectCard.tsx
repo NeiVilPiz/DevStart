@@ -1,4 +1,5 @@
 import type { Project } from "../types/project"
+import { motion } from "framer-motion"
 
 interface ProjectCardProps {
   project: Project

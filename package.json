@@ -3,6 +3,9 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-      "dev": "ts-node-dev src/index.ts"
+        "dev": "ts-node-dev src/index.ts"
+    },
+    "dependencies": {
+        "framer-motion": "^12.40.0"
     }
 }
