@@ -10,7 +10,7 @@ import type { Project } from "../types/project"
 
 interface ProjectContextType {
   projects: Project[]
-  addProject: (project: Project) => void
+  addProject: (project: Project) => Promise<void>
 }
 
 const ProjectContext =

@@ -1,4 +1,5 @@
 export interface Project {
+  id: number
   title: string
   category: string
   description: string
@@ -6,6 +7,5 @@ export interface Project {
   features: string[]
   targetUsers: string[]
   roadmap: string[]
-
   score?: number
 }

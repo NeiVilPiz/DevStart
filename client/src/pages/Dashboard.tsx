@@ -1,30 +1,155 @@
+import { useState } from "react"
+import { motion } from "framer-motion"
+import { Link } from "react-router-dom"
+
 import ProjectCard from "../components/ProjectCard"
-import { useProjectHistory } from "../hooks/useProjectHistory"
+import { useProjects } from "../context/ProjectContext"
 
 export default function Dashboard() {
 
-  const { projects } = useProjectHistory()
+  const { projects } = useProjects()
+
+  const [categoryFilter, setCategoryFilter] = useState("")
+  const [scoreFilter, setScoreFilter] = useState(0)
+
+  const totalProjects = projects.length
+
+  const averageScore =
+    totalProjects > 0
+      ? Math.round(
+          projects.reduce(
+            (acc, p) => acc + (p.score || 0),
+            0
+          ) / totalProjects
+        )
+      : 0
+
+  const latestProject = projects[projects.length - 1]
+
+  const filteredProjects = projects.filter((project) => {
+
+    const categoryMatch =
+      project.category
+        .toLowerCase()
+        .includes(categoryFilter.toLowerCase())
+
+    const scoreMatch =
+      (project.score || 0) >= scoreFilter
+
+    return categoryMatch && scoreMatch
+  })
 
   return (
-    <main className="min-h-screen bg-black text-white p-8">
-      <div className="max-w-4xl mx-auto space-y-8">
+    <main className="min-h-screen bg-black text-white p-6">
 
-        <h1 className="text-5xl font-bold mb-8">
-          Project History
-        </h1>
+      <div className="max-w-6xl mx-auto space-y-8">
 
-        {projects.length === 0 ? (
-          <p>No projects yet.</p>
-        ) : (
-          projects.map((project, index) => (
-            <ProjectCard
+        {/* HEADER */}
+        <div>
+          <h1 className="text-4xl font-bold">
+            Dashboard
+          </h1>
+
+          <p className="text-zinc-400 mt-2">
+            Overview of your generated startup ideas
+          </p>
+        </div>
+
+        {/* STATS */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+            <p className="text-zinc-400">Total Projects</p>
+            <p className="text-2xl font-bold">{totalProjects}</p>
+          </div>
+
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+            <p className="text-zinc-400">Average Score</p>
+            <p className="text-2xl font-bold">{averageScore}</p>
+          </div>
+
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4">
+            <p className="text-zinc-400">Latest Idea</p>
+            <p className="text-sm font-semibold truncate">
+              {latestProject?.title || "—"}
+            </p>
+          </div>
+
+        </div>
+
+        {/* FILTERS */}
+        <div className="flex flex-col md:flex-row gap-4">
+
+          <input
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            placeholder="Filter by category..."
+            className="bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-2 flex-1"
+          />
+
+          <input
+            type="number"
+            value={scoreFilter}
+            onChange={(e) => setScoreFilter(Number(e.target.value))}
+            placeholder="Min score"
+            className="bg-zinc-900 border border-zinc-800 rounded-lg px-4 py-2 w-full md:w-40"
+          />
+
+        </div>
+
+        {/* EMPTY STATE */}
+        {projects.length === 0 && (
+          <div className="text-center py-20 border border-dashed border-zinc-800 rounded-xl">
+
+            <h2 className="text-2xl font-semibold mb-2">
+              No projects yet
+            </h2>
+
+            <p className="text-zinc-400 mb-4">
+              Go to Home and generate your first idea
+            </p>
+
+            <Link
+              to="/"
+              className="bg-white text-black px-4 py-2 rounded-lg font-semibold"
+            >
+              Create Idea
+            </Link>
+
+          </div>
+        )}
+
+        {/* GRID */}
+        {projects.length > 0 && (
+
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              hidden: {},
+              visible: {
+                transition: {
+                  staggerChildren: 0.08
+                }
+              }
+            }}
+          >
+
+            {filteredProjects.map((project, index) => (
+              <ProjectCard
               key={index}
               project={project}
+              clickable={true}
             />
-          ))
+            ))}
+
+          </motion.div>
+
         )}
 
       </div>
+
     </main>
   )
 }

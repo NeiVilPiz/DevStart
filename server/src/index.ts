@@ -1,17 +1,26 @@
-import express from "express";
-import cors from "cors";
+import express from "express"
+import cors from "cors"
+import projectsRoutes from "./routes/projects.routes"
+import { Project } from "./types/project"
 
-const app = express();
+const test: Project = {
+  id: 1,
+  title: "test",
+  category: "test",
+  description: "test",
+  problem: "test",
+  features: [],
+  targetUsers: [],
+  roadmap: []
+}
 
-app.use(cors());
-app.use(express.json());
+const app = express()
 
-app.get("/", (_, res) => {
-  res.json({ message: "DevLaunch API running" });
-});
+app.use(cors())
+app.use(express.json())
 
-const PORT = 3000;
+app.use("/api/projects", projectsRoutes)
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(3001, () => {
+  console.log("Server running on http://localhost:3001")
+})

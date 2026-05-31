@@ -59,6 +59,8 @@ export default function Home() {
       const category = detectCategory(idea)
 
       const newProject: Project = {
+        id: Date.now(),
+
         title: category,
         category,
 
@@ -85,6 +87,7 @@ export default function Home() {
         ],
 
         score: scoreProject(idea, {
+          id: Date.now(),
           title: category,
           category,
           description: "",
@@ -92,7 +95,7 @@ export default function Home() {
           features: [],
           targetUsers: [],
           roadmap: [],
-        }),
+        }) || 0,
       }
 
       addProject(newProject)
@@ -128,9 +131,7 @@ export default function Home() {
         />
 
         {/* LOADING */}
-        {loading && (
-          <LoadingCard />
-        )}
+        {loading && <LoadingCard />}
 
         {/* RESULT */}
         {!loading && latestProject && (

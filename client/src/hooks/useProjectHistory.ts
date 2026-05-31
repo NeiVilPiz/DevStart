@@ -1,55 +1,69 @@
 import { useEffect, useState } from "react"
-
 import type { Project } from "../types/project"
+import { getProjects, createProject } from "../api/projectsApi"
 
 export function useProjectHistory() {
 
-  const [projects, setProjects] =
-    useState<Project[]>([])
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
 
-    const saved =
-      localStorage.getItem("projects")
+    const loadProjects = async () => {
 
-    if (!saved) return
+      try {
 
-    try {
+        setLoading(true)
 
-      setProjects(JSON.parse(saved))
+        const data = await getProjects()
 
-    } catch (error) {
+        setProjects(data)
 
-      console.error("Invalid localStorage data")
+      } catch (err) {
 
-      localStorage.removeItem("projects")
+        console.error(err)
 
-      setProjects([])
+        setError("Error loading projects")
 
+      } finally {
+
+        setLoading(false)
+
+      }
     }
+
+    loadProjects()
 
   }, [])
 
-  const addProject = (project: Project) => {
+  const addProject = async (project: Project) => {
 
-    setProjects(prev => {
+    try {
 
-      const updated = [...prev, project]
+      const newProject = await createProject(project)
 
-      localStorage.setItem(
-        "projects",
-        JSON.stringify(updated)
-      )
+      setProjects((prev) => [
+        ...prev,
+        newProject
+      ])
 
-      return updated
+    } catch (err) {
 
-    })
+      console.error(err)
 
+      setError("Error creating project")
+
+    }
   }
 
   return {
+
     projects,
     addProject,
+    loading,
+    error
+
   }
 
 }
