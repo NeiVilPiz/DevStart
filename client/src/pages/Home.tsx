@@ -86,16 +86,7 @@ export default function Home() {
           "Deploy platform",
         ],
 
-        score: scoreProject(idea, {
-          id: Date.now(),
-          title: category,
-          category,
-          description: "",
-          problem: "",
-          features: [],
-          targetUsers: [],
-          roadmap: [],
-        }) || 0,
+        score: scoreProject(idea)
       }
 
       addProject(newProject)
