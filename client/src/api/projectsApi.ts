@@ -1,14 +1,12 @@
-import type { Project } from "../types/project"
+const BASE_URL = import.meta.env.VITE_API_URL
 
-const BASE_URL = import.meta.env.VITE_API_URL + "/projects"
-
-export async function getProjects(): Promise<Project[]> {
-  const res = await fetch(BASE_URL)
+export async function getProjects() {
+  const res = await fetch(`${BASE_URL}/projects`)
   return res.json()
 }
 
-export async function createProject(project: Project): Promise<Project> {
-  const res = await fetch(BASE_URL, {
+export async function createProject(project: any) {
+  const res = await fetch(`${BASE_URL}/projects`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
