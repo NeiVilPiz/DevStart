@@ -72,5 +72,6 @@ Trello Board:
 [DevLaunch Project Managment](https://trello.com/b/ojQfqUpa/devlaunch-project-management)
 
 ## Vercel
-[FrontEnd](https://vercel.com/neis-projects-75d61bb1/dev-start-api)
-[BackEnd](https://vercel.com/neis-projects-75d61bb1/devstart-backend)
+[FrontEnd](https://dev-start-sandy.vercel.app)
+
+[BackEnd](https://devstart-backend.vercel.app)
