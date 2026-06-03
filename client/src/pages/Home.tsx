@@ -1,5 +1,4 @@
 import { useState } from "react"
-
 import IdeaInput from "../components/IdeaInput"
 import ProjectCard from "../components/ProjectCard"
 import LoadingCard from "../components/LoadingCard"
@@ -60,33 +59,26 @@ export default function Home() {
 
       const newProject: Project = {
         id: Date.now(),
-
         title: category,
         category,
-
         description: `A ${category.toLowerCase()} designed around "${idea}".`,
-
         problem: `Users struggle managing ${idea} efficiently.`,
-
         features: [
           "Authentication system",
           "Analytics dashboard",
           "Automation tools",
         ],
-
         targetUsers: [
           "Developers",
           "Freelancers",
           "Teams",
         ],
-
         roadmap: [
           "Build MVP",
           "Create backend",
           "Deploy platform",
         ],
-
-        score: scoreProject(idea)
+        score: scoreProject(idea),
       }
 
       addProject(newProject)
@@ -99,13 +91,12 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-black text-white flex justify-center px-4 py-10">
+    <main className="min-h-screen bg-black text-white flex justify-center px-4 py-12">
 
-      <div className="w-full max-w-4xl space-y-6">
+      <div className="w-full max-w-4xl space-y-8">
 
-        {/* HEADER */}
         <div>
-          <h1 className="text-4xl sm:text-5xl font-bold">
+          <h1 className="text-5xl font-bold">
             DevLaunch
           </h1>
 
@@ -114,17 +105,14 @@ export default function Home() {
           </p>
         </div>
 
-        {/* INPUT */}
         <IdeaInput
           idea={idea}
           onIdeaChange={setIdea}
           onGenerate={generateProject}
         />
 
-        {/* LOADING */}
         {loading && <LoadingCard />}
 
-        {/* RESULT */}
         {!loading && latestProject && (
           <ProjectCard project={latestProject} />
         )}
